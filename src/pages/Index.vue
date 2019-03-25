@@ -26,6 +26,7 @@ export default {
   name: 'PageIndex',
   data () {
     return {
+      proxyURL: 'https://cors-anywhere.herokuapp.com/',
       csvFileURL: null,
       csvContent: null,
       csvHeaders: [],
@@ -34,39 +35,41 @@ export default {
   },
   methods: {
     fetchData: function () {
-      this.csvContent = null
-      this.csvHeaders = []
-      this.csvItems = []
-      Papa.parse(this.csvFileURL, {
-        delimiter: '', // auto-detect
-        newline: '', // auto-detect
-        quoteChar: '"',
-        escapeChar: '"',
-        header: false,
-        transformHeader: undefined,
-        dynamicTyping: true,
-        preview: 0,
-        encoding: '',
-        worker: false,
-        comments: false,
-        step: undefined,
-        complete: (results) => {
-          this.csvContent = results.data
-          this.extractHeadersAndData()
-          // console.log(this.csvContent);
-          // console.log(Object.values(this.csvContent));
-        },
-        error: undefined,
-        download: true,
-        downloadRequestHeaders: undefined,
-        skipEmptyLines: false,
-        chunk: undefined,
-        fastMode: undefined,
-        beforeFirstChunk: undefined,
-        withCredentials: undefined,
-        transform: undefined,
-        delimitersToGuess: [',', '\t', '|', ';', Papa.RECORD_SEP, Papa.UNIT_SEP]
-      })
+      if (this.csvFileURL !== null) {
+        this.csvContent = null
+        this.csvHeaders = []
+        this.csvItems = []
+        Papa.parse(this.proxyURL + this.csvFileURL, {
+          delimiter: '', // auto-detect
+          newline: '', // auto-detect
+          quoteChar: '"',
+          escapeChar: '"',
+          header: false,
+          transformHeader: undefined,
+          dynamicTyping: true,
+          preview: 0,
+          encoding: '',
+          worker: false,
+          comments: false,
+          step: undefined,
+          complete: (results) => {
+            this.csvContent = results.data
+            this.extractHeadersAndData()
+            // console.log(this.csvContent);
+            // console.log(Object.values(this.csvContent));
+          },
+          error: undefined,
+          download: true,
+          downloadRequestHeaders: undefined,
+          skipEmptyLines: false,
+          chunk: undefined,
+          fastMode: undefined,
+          beforeFirstChunk: undefined,
+          withCredentials: undefined,
+          transform: undefined,
+          delimitersToGuess: [',', '\t', '|', ';', Papa.RECORD_SEP, Papa.UNIT_SEP]
+        })
+      }
     },
     extractHeadersAndData () {
       const csvDataArray = Object.values(this.csvContent)
